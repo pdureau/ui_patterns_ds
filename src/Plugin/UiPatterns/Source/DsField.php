@@ -24,6 +24,7 @@ class DsField extends SourcePluginBase {
    * {@inheritdoc}
    */
   public function getPropValue(): mixed {
+    ksm($this->context);
     // @todo
     return [
       "#plain_text" => "This is a DS field",

@@ -21,13 +21,19 @@ class Component extends DsFieldTemplateBase {
 
   use ComponentFormBuilderTrait;
 
-  /**
+  /**getCurrentField
    * {@inheritdoc}
    */
   public function alterForm(&$form) {
     $config = $this->getConfiguration();
+    $context = [];
+    $current_field = $this->getCurrentField();
+    if ($current_field) {
+      // TODO: $current_field need to implement ContextInterface
+      $context['field'] = $current_field;
+    }
     $form_state = new FormState();
-    $form =array_merge($form, $this->buildComponentsForm($form_state, [], NULL, TRUE, TRUE));
+    $form = array_merge($form, $this->buildComponentsForm($form_state, $context, NULL, TRUE, TRUE));
   }
 
   /**
@@ -42,6 +48,29 @@ class Component extends DsFieldTemplateBase {
    */
   public function massageRenderValues(&$field_settings, $values) {
     $field_settings = $values['ui_patterns'];
+  }
+
+  /**
+   * Get the field currently being edited.
+   *
+   * @return string
+   *   Name of the field currently being edited.
+   */
+  protected function getCurrentField(): ?string {
+    $request = \Drupal::service('request_stack')->getCurrentRequest()->request;
+    $parameters = $request->all();
+    if (isset($parameters['fields']) && is_array($parameters['fields'])) {
+      $fields = array_filter($parameters['fields'], function ($field) {
+        return isset($field['settings_edit_form']['third_party_settings']['ds']['ft']['id']) && $field['settings_edit_form']['third_party_settings']['ds']['ft']['id'] == 'component';
+      });
+      $fields = array_keys($fields);
+      $field = reset($fields);
+    }
+    if (empty($field)) {
+      $trigger_element = $request->get('_triggering_element_name');
+      $field = str_replace('_plugin_settings_edit', '', $trigger_element);
+    }
+    return isset($parameters['fields'][$field]) ? $field : NULL;
   }
 
 }
