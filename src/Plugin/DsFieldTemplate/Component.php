@@ -14,7 +14,7 @@ use Drupal\ui_patterns\Form\ComponentFormBuilderTrait;
  * @DsFieldTemplate(
  *   id = "component",
  *   title = @Translation("Component (UI Patterns)"),
- *   theme = "pattern_ds_field_template",
+ *   theme = "ui_patterns_ds",
  * )
  */
 class Component extends DsFieldTemplateBase {
@@ -26,9 +26,8 @@ class Component extends DsFieldTemplateBase {
    */
   public function alterForm(&$form) {
     $config = $this->getConfiguration();
-    // ksm($form);
     $form_state = new FormState();
-    $form["ui_patterns"] = $this->buildComponentsForm($form_state, [], NULL, TRUE, TRUE);
+    $form =array_merge($form, $this->buildComponentsForm($form_state, [], NULL, TRUE, TRUE));
   }
 
   /**
@@ -42,7 +41,7 @@ class Component extends DsFieldTemplateBase {
    * {@inheritdoc}
    */
   public function massageRenderValues(&$field_settings, $values) {
-    // @todo
+    $field_settings = $values['ui_patterns'];
   }
 
 }
