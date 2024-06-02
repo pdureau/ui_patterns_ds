@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function ui_patterns_ds_theme() {
+  return [
+    'pattern_ds_field_template' => [
+      'variables' => ['pattern' => NULL],
+    ],
+  ];
+}

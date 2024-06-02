@@ -1,0 +1,8 @@
+name: UI Patterns DS
+type: module
+description: XXX
+core_version_requirement: ^10
+package: User interface
+dependencies:
+  - ui_patterns:ui_patterns
+  - ds:ds_extras
