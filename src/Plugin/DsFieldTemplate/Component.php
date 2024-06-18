@@ -21,7 +21,7 @@ class Component extends DsFieldTemplateBase {
 
   use ComponentFormBuilderTrait;
 
-  /**getCurrentField
+  /**
    * {@inheritdoc}
    */
   public function alterForm(&$form) {
@@ -29,7 +29,7 @@ class Component extends DsFieldTemplateBase {
     $context = [];
     $current_field = $this->getCurrentField();
     if ($current_field) {
-      // TODO: $current_field need to implement ContextInterface
+      // @todo $current_field need to implement ContextInterface
       $context['field'] = $current_field;
     }
     $form_state = new FormState();

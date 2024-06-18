@@ -1,0 +1,7 @@
+services:
+  ui_patterns_ds.ds_field:
+    class: Drupal\ui_patterns_ds\ContextProvider\DsFieldContext
+    arguments: ['@request_stack']
+    tags:
+      - { name: context_provider }
+
