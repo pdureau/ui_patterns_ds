@@ -28,7 +28,7 @@ class DsFieldContext implements ContextProviderInterface {
    */
   public function getRuntimeContexts(array $unqualified_context_ids) {
     $context_definition = new ContextDefinition('string', $this->t('DS Field pattern context'));
-
+    $result = [];
     $request = $this->requestStack->getCurrentRequest()->request;
     $parameters = $request->all();
     if (isset($parameters['fields']) && is_array($parameters['fields'])) {
@@ -37,18 +37,18 @@ class DsFieldContext implements ContextProviderInterface {
       });
       $fields = array_keys($fields);
       $field = reset($fields);
+      if (!empty($field)) {
+        $trigger_element = $request->get('_triggering_element_name');
+        $field = str_replace('_plugin_settings_edit', '', $trigger_element);
+        if ($parameters['fields'][$field]) {
+          $values[] = $parameters['fields'][$field];
+        }
+        $context = new Context($context_definition, $values);
+        $result = [
+          'ds_field_context' => $context,
+        ];
+      }
     }
-    if (empty($field)) {
-      $trigger_element = $request->get('_triggering_element_name');
-      $field = str_replace('_plugin_settings_edit', '', $trigger_element);
-    }
-    if ($parameters['fields'][$field]) {
-      $values[] = $parameters['fields'][$field];
-    }
-    $context = new Context($context_definition, $values);
-    $result = [
-      'ds_field_context' => $context,
-    ];
 
     return $result;
   }
