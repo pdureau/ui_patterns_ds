@@ -13,7 +13,7 @@ use Drupal\ui_patterns\Form\ComponentFormBuilderTrait;
  *
  * @DsFieldTemplate(
  *   id = "component",
- *   title = @Translation("Component (UI Patterns)"),
+ *   title = @Translation("Component (UI Patterns) saf"),
  *   theme = "ui_patterns_ds",
  * )
  */
@@ -47,7 +47,8 @@ class Component extends DsFieldTemplateBase {
    * {@inheritdoc}
    */
   public function massageRenderValues(&$field_settings, $values) {
-    $field_settings = $values['ui_patterns'];
+    // This is not necessary.
+    // $field_settings = $values['ui_patterns'];;
   }
 
   /**

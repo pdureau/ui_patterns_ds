@@ -20,9 +20,11 @@ function ui_patterns_ds_theme() {
  */
 function ui_patterns_ds_preprocess_field__ui_patterns_ds(&$vars) {
   $ds_config = $vars['ds-config'];
-  $vars['component'] = [
-    '#type' => 'component',
-    '#component' => $ds_config['settings']['component_id'] ,
-    '#ui_patterns' => $ds_config['settings'],
-  ];
+  if (!empty($ds_config['settings'])) {
+    $vars['component'] = [
+      '#type' => 'component',
+      '#component' => $ds_config['settings']['component_id'] ,
+      '#ui_patterns' => $ds_config['settings'],
+    ];
+  }
 }
