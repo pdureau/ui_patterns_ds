@@ -18,8 +18,7 @@ class DsField extends SourcePluginBase {
    * {@inheritdoc}
    */
   public function getPropValue(): mixed {
-   // ksm($this->context);
-    // @todo
+    // @todo : Update this. Looks like there is no impact of this.
     return [
       "#plain_text" => "This is a DS field",
     ];

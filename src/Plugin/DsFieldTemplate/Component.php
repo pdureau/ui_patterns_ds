@@ -18,7 +18,6 @@ use Drupal\ui_patterns\Form\ComponentFormBuilderTrait;
  * )
  */
 class Component extends DsFieldTemplateBase {
-
   use ComponentFormBuilderTrait;
 
   /**
@@ -26,14 +25,24 @@ class Component extends DsFieldTemplateBase {
    */
   public function alterForm(&$form) {
     $config = $this->getConfiguration();
-    $context = [];
+    $contexts = [];
     $current_field = $this->getCurrentField();
     if ($current_field) {
       // @todo $current_field need to implement ContextInterface
-      $context['field'] = $current_field;
+      $context["field"] = $current_field;
     }
     $form_state = new FormState();
-    $form = array_merge($form, $this->buildComponentsForm($form_state, $context, NULL, TRUE, TRUE));
+    $this->setComponentConfiguration($config);
+    $form = array_merge(
+      $form,
+      $this->buildComponentsForm(
+        $form_state,
+        $contexts,
+        NULL,
+        TRUE,
+        TRUE
+      )
+    );
   }
 
   /**
@@ -48,7 +57,7 @@ class Component extends DsFieldTemplateBase {
    */
   public function massageRenderValues(&$field_settings, $values) {
     // This is not necessary.
-    // $field_settings = $values['ui_patterns'];;
+    // $field_settings = $values['ui_patterns'];;.
   }
 
   /**
@@ -58,20 +67,23 @@ class Component extends DsFieldTemplateBase {
    *   Name of the field currently being edited.
    */
   protected function getCurrentField(): ?string {
-    $request = \Drupal::service('request_stack')->getCurrentRequest()->request;
+    $request = \Drupal::service("request_stack")->getCurrentRequest()->request;
     $parameters = $request->all();
-    if (isset($parameters['fields']) && is_array($parameters['fields'])) {
-      $fields = array_filter($parameters['fields'], function ($field) {
-        return isset($field['settings_edit_form']['third_party_settings']['ds']['ft']['id']) && $field['settings_edit_form']['third_party_settings']['ds']['ft']['id'] == 'component';
+    if (isset($parameters["fields"]) && is_array($parameters["fields"])) {
+      $fields = array_filter($parameters["fields"], function ($field) {
+        return isset(
+          $field["settings_edit_form"]["third_party_settings"]["ds"]["ft"]["id"]
+        ) &&
+          $field["settings_edit_form"]["third_party_settings"]["ds"]["ft"]["id"] == "component";
       });
       $fields = array_keys($fields);
       $field = reset($fields);
     }
     if (empty($field)) {
-      $trigger_element = $request->get('_triggering_element_name');
-      $field = str_replace('_plugin_settings_edit', '', $trigger_element);
+      $trigger_element = $request->get("_triggering_element_name");
+      $field = str_replace("_plugin_settings_edit", "", $trigger_element);
     }
-    return isset($parameters['fields'][$field]) ? $field : NULL;
+    return isset($parameters["fields"][$field]) ? $field : NULL;
   }
 
 }
